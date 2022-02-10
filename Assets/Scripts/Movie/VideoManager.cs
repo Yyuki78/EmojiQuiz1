@@ -14,6 +14,8 @@ public class VideoManager : MonoBehaviour
     [SerializeField, Tooltip("Video Player を持つオブジェクト")]
     private GameObject _gameObject;
 
+    [SerializeField] GameObject IconSelectPanel;
+
     VideoPlayer _videoPlayer;
 
     // Start is called before the first frame update
@@ -30,11 +32,11 @@ public class VideoManager : MonoBehaviour
         if (GameManager.Instance.IsMovie)
         {
             PlayMovie();
-        }
+        }/*
         else
         {
             ResetMovie();
-        }
+        }*/
     }
 
     void PlayMovie()
@@ -51,6 +53,7 @@ public class VideoManager : MonoBehaviour
     {
         _videoPlayer.Stop();
         //ここは後で押されたボタンに応じて返還地点を変えるようにする
+        Debug.Log("aaaaaa");
         GameManager.Instance.SetCurrentState(GameManager.GameMode.IconSelect);
     }
 
