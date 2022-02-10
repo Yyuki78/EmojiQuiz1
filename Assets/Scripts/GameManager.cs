@@ -24,8 +24,9 @@ public class GameManager : MonoBehaviour
     //MovieModeÇ©Ç«Ç§Ç©
     public bool IsMovie => GameMode.Movie == currentGameState;
 
-    public Text label;
-    public Button button;
+    [SerializeField] GameObject MoviePanel;
+    [SerializeField] GameObject IconSelectPanel;
+    [SerializeField] GameObject RoomSelectPanel;
 
     void Awake()
     {
@@ -50,7 +51,7 @@ public class GameManager : MonoBehaviour
                 MovieAction();
                 break;
             case GameMode.IconSelect:
-                StartCoroutine(IconSelectCoroutine());
+                IconSelectAction();
                 break;
             case GameMode.RoomSelect:
                 RoomSelectAction();
@@ -73,25 +74,24 @@ public class GameManager : MonoBehaviour
     void MovieAction()
     {
         Debug.Log("MovieMode");
+        MoviePanel.SetActive(true);
+        IconSelectPanel.SetActive(false);
     }
 
     // IconSelectÇ…Ç»Ç¡ÇΩÇ∆Ç´ÇÃèàóù
-    IEnumerator IconSelectCoroutine()
+    void IconSelectAction()
     {
         Debug.Log("IconSelectMode");
-        label.text = "3";
-        yield return new WaitForSeconds(1);
-        label.text = "2";
-        yield return new WaitForSeconds(1);
-        label.text = "1";
-        yield return new WaitForSeconds(1);
-        label.text = "";
-        SetCurrentState(GameMode.IconSelect);
+        MoviePanel.SetActive(false);
+        IconSelectPanel.SetActive(true);
     }
     // RoomSelectÇ…Ç»Ç¡ÇΩÇ∆Ç´ÇÃèàóù
     void RoomSelectAction()
     {
         Debug.Log("RoomSelectMode");
+        MoviePanel.SetActive(false);
+        IconSelectPanel.SetActive(true);
+        RoomSelectPanel.SetActive(true);
     }
     // EndÇ…Ç»Ç¡ÇΩÇ∆Ç´ÇÃèàóù
     void EndAction()
