@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
 
     public GameMode GetCurrentState()
     {
-        return Instance.currentGameState;
+        return currentGameState;
     }
 
     // ó‘Ô‚ª•Ï‚í‚Á‚½‚ç‰½‚ğ‚·‚é‚©

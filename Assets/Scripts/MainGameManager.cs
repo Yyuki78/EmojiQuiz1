@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public class MainGameManager : MonoBehaviour
+public class MainGameManager : MonoBehaviourPunCallbacks
 {
     public enum MainGameMode
     {
-        PlayerSelect = 0,
+        LoadGame = 0,
+        PlayerSelect,
         ReportQuestion,
         QuestionTime,
         ShareAnswer,
@@ -17,11 +19,15 @@ public class MainGameManager : MonoBehaviour
     public static int playcount = 0;
     private bool preSetting;
     public static float modetime;//後でprivateに変える
+    private int SST;
+
+    private PhotonView M_photonView;
     // Start is called before the first frame update
     void Start()
     {
         GameManager.Instance.SetCurrentState(GameManager.GameMode.MainGame);
-        mainmode = MainGameMode.PlayerSelect;
+        mainmode = MainGameMode.LoadGame;
+        M_photonView = this.GetComponent<PhotonView>();
     }
 
     // Update is called once per frame
@@ -33,6 +39,16 @@ public class MainGameManager : MonoBehaviour
             modetime -= (float)Time.deltaTime;
             switch (mainmode)
             {
+                case MainGameMode.LoadGame:
+                    if (preSetting)
+                    {
+                        preLG();
+                    }
+                    if (PhotonNetwork.ServerTimestamp - SST <= 3000)
+                    {
+                        premainmode = MainGameMode.PlayerSelect;
+                    }
+                    break;
                 case MainGameMode.PlayerSelect:
                     if (preSetting)
                     {
@@ -108,6 +124,13 @@ public class MainGameManager : MonoBehaviour
             }
         }
     }
+    private void preLG()
+    {
+        SST = PhotonNetwork.ServerTimestamp;
+        M_photonView.RPC(nameof(NetworkOperate.Operate.SendServerTime), RpcTarget.MasterClient, SST);
+        //M_photonView.RPC(nameof(NetworkOperate.Operate.SelectPlayer), RpcTarget.MasterClient, キャラクタの);
+        //M_photonView.RPC(nameof(NetworkOperate.Operate.OperateQuestion), RpcTarget.MasterClient, 絵文字の選択肢番号のbyte配列, 答えの番号);
+    }
     private void prePS()
     {
         modetime = 3.0f;
@@ -134,6 +157,11 @@ public class MainGameManager : MonoBehaviour
         modetime = 8.0f;
 
         preSetting = false;
+    }
+
+    private void Shuffle(byte players)
+    {
+
     }
 
 }
