@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         SetCurrentState(GameMode.Start);
+        Debug.Log(GetCurrentState());
+        Debug.Log("GameManager_Awake");
     }
 
 
@@ -44,7 +46,7 @@ public class GameManager : MonoBehaviour
 
     public GameMode GetCurrentState()
     {
-        return Instance.currentGameState;
+        return currentGameState;
     }
 
     // ó‘Ô‚ª•Ï‚í‚Á‚½‚ç‰½‚ğ‚·‚é‚©

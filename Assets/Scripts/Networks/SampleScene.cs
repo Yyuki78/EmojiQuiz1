@@ -19,15 +19,17 @@ public class SampleScene : MonoBehaviourPunCallbacks
     {
         //PhotonNetwork.JoinLobby();
         // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
-        //PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 5 }, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 5 }, TypedLobby.Default);
     }
 
     // マッチングが成功した時に呼ばれるコールバック
     public override void OnJoinedRoom()
     {
         // マッチング後、ランダムな位置に自分自身のネットワークオブジェクトを生成する
-        var v = new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
-        PhotonNetwork.Instantiate("GamePlayer", v, Quaternion.identity);
+        GameManager.Instance.SetCurrentState(GameManager.GameMode.MainGame);
+        Debug.Log("JoinRoom");
+        //var v = new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
+        //PhotonNetwork.Instantiate("GamePlayer", v, Quaternion.identity);
     }
 
     public void JorCRoom1()
