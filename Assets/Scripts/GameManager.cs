@@ -42,6 +42,11 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged(currentGameState);
     }
 
+    public GameMode GetCurrentState()
+    {
+        return Instance.currentGameState;
+    }
+
     // ó‘Ô‚ª•Ï‚í‚Á‚½‚ç‰½‚ğ‚·‚é‚©
     void OnGameStateChanged(GameMode state)
     {
