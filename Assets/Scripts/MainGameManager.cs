@@ -20,14 +20,14 @@ public class MainGameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.mode = GameManager.GameMode.MainGame;
+        GameManager.Instance.SetCurrentState(GameManager.GameMode.MainGame);
         mainmode = MainGameMode.PlayerSelect;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.mode == GameManager.GameMode.MainGame)
+        if (GameManager.Instance.GetCurrentState() == GameManager.GameMode.MainGame)
         {
             Debug.Log(modetime);
             modetime -= (float)Time.deltaTime;
@@ -132,6 +132,8 @@ public class MainGameManager : MonoBehaviour
     private void preRA()
     {
         modetime = 8.0f;
+
         preSetting = false;
     }
+
 }
