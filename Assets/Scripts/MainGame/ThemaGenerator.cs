@@ -15,6 +15,11 @@ public class ThemaGenerator : MonoBehaviour
 
     private int _ranChoice;
     public int[] _choicesNum;//選択肢の番号
+    public byte[] _choicesBytes1;//選択肢1のbyte型
+    public byte[] _choicesBytes2;//選択肢2のbyte型
+    public byte[] _choicesBytes3;//選択肢3のbyte型
+    public byte[] _choicesBytes4;//選択肢4のbyte型
+    public byte[] _choicesBytes5;//選択肢5のbyte型
 
     // Start is called before the first frame update
     private void Start()
@@ -31,6 +36,10 @@ public class ThemaGenerator : MonoBehaviour
         Debug.Log("お題は" + _themaNum);
         Debug.Log("お題の情報は" + emojiInfo.emojiAttribute1[_themaNum] + "," + emojiInfo.emojiAttribute2[_themaNum] + "," + emojiInfo.imageAddress[_themaNum]);
         _themaBytes = BitConverter.GetBytes(_themaNum);
+        foreach (byte b in _themaBytes)
+        {
+            Debug.Log(string.Format("{0,3:X2}", b));
+        }
         EmojiImage.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[_themaNum]);
     }
 
@@ -63,6 +72,12 @@ public class ThemaGenerator : MonoBehaviour
             _choicesNum[i] = _choicesNum[randomIndex];
             _choicesNum[randomIndex] = temp;
         }
+        //選択肢をByte型に変換
+        _choicesBytes1 = BitConverter.GetBytes(_choicesNum[0]);
+        _choicesBytes2 = BitConverter.GetBytes(_choicesNum[1]);
+        _choicesBytes3 = BitConverter.GetBytes(_choicesNum[2]);
+        _choicesBytes4 = BitConverter.GetBytes(_choicesNum[3]);
+        _choicesBytes5 = BitConverter.GetBytes(_choicesNum[4]);
         //確認用
         for (int i = 0; i < 5; i++)
         {
