@@ -38,12 +38,14 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     private bool questioner;
 
     private PhotonView M_photonView;
+    private NetworkOperate M_operate;
     // Start is called before the first frame update
     void Start()
     {
         preSetting = true;
         mainmode = MainGameMode.LoadGame;
         M_photonView = this.GetComponent<PhotonView>();
+        M_operate = this.GetComponent<NetworkOperate>();
     }
 
     // Update is called once per frame
@@ -103,8 +105,8 @@ public class MainGameManager : MonoBehaviourPunCallbacks
                     {
                         sendall = false;
                         Debug.Log(ourAnswer);
-                        ourAnswer = NetworkOperate.Operate.getPlayerAnswer();
-                        //M_photonView.RPC(nameof(NetworkOperate.Operate.SendOurAnswers), RpcTarget.All, ourAnswer);
+                        ourAnswer = M_operate.getPlayerAnswer();
+                        M_photonView.RPC(nameof(M_operate.SendOurAnswers), RpcTarget.All, ourAnswer);
                     }
                     if (modetime <= 0)
                     {
@@ -150,14 +152,13 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     {
         playernumber = PhotonNetwork.PlayerList.Length;
         SST = PhotonNetwork.ServerTimestamp;
-        //M_photonView.RPC(nameof(NetworkOperate.Operate.SendServerTime), RpcTarget.MasterClient, SST);
-        //SST = NetworkOperate.Operate.getStandbyTime();
-        Debug.Log(SST);
+        M_photonView.RPC(nameof(M_operate.SendServerTime), RpcTarget.MasterClient, SST);
+        SST = M_operate.getStandbyTime();
         if (PhotonNetwork.IsMasterClient)
         {
             Shuffle(/*(byte)playernumber*/ 5);
         }
-        //M_photonView.RPC(nameof(NetworkOperate.Operate.SelectPlayer), RpcTarget.MasterClient, playerOrder[playcount%playernumber]);
+        M_photonView.RPC(nameof(M_operate.SelectPlayer), RpcTarget.MasterClient, playerOrder[playcount%playernumber]);
         Debug.Log(playerOrder[playcount % playernumber]);
         preSetting = false;
     }
@@ -182,7 +183,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks
         }
         modetime = 3.0f;
         playcount++;
-        //M_photonView.RPC(nameof(NetworkOperate.Operate.OperateQuestion), RpcTarget.MasterClient, ŠG•¶Žš‚Ì‘I‘ðŽˆ”Ô†‚Ìbyte”z—ñ, “š‚¦‚Ì”Ô†);
+        //M_photonView.RPC(nameof(M_operate.OperateQuestion), RpcTarget.MasterClient, ŠG•¶Žš‚Ì‘I‘ðŽˆ”Ô†‚Ìbyte”z—ñ, “š‚¦‚Ì”Ô†);
         preSetting = false; 
     }
     private void preRQ()
@@ -202,7 +203,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     }
     private void preQT()
     {
-        modetime = 30.0f;
+        modetime = 10.0f;
         preSetting = false;
     }
     private void preRA()
@@ -212,7 +213,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks
             ChoiceBoard.SetActive(false);
             AnswerBoard.SetActive(true);
         }
-        //M_photonView.RPC(nameof(NetworkOperate.Operate.SendMyAnswer), RpcTarget.All, myAnswer, (byte)playernumber);
+        M_photonView.RPC(nameof(M_operate.SendMyAnswer), RpcTarget.All, myAnswer, (byte)playernumber);
         modetime = 4.0f;
         preSetting = false;
         sendall = true;
@@ -220,9 +221,9 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     private void preSA()
     {
         SST = PhotonNetwork.ServerTimestamp;
-        //M_photonView.RPC(nameof(NetworkOperate.Operate.SendServerTime), RpcTarget.MasterClient, SST);
-        //SST = NetworkOperate.Operate.getStandbyTime();
-        //M_photonView.RPC(nameof(NetworkOperate.Operate.SelectPlayer), RpcTarget.MasterClient, playerOrder[playcount % playernumber]);
+        M_photonView.RPC(nameof(M_operate.SendServerTime), RpcTarget.MasterClient, SST);
+        SST = M_operate.getStandbyTime();
+        M_photonView.RPC(nameof(M_operate.SelectPlayer), RpcTarget.MasterClient, playerOrder[playcount % playernumber]);
         AnswerBoard.SetActive(false);
         switch (playernumber)
         {
@@ -237,6 +238,10 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     private void Shuffle(byte players)
     {
         playerOrder = new byte[players];
+        for(int i = 0; i < players; i++)
+        {
+            playerOrder[i] = (byte)i;
+        }
         for(int i = 0; i < players; i++)
         {
             byte tmp = playerOrder[i];
