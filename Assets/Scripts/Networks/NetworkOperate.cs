@@ -30,6 +30,9 @@ public class NetworkOperate : MonoBehaviour
 
     public int getStandbyTime()
     {
+        Debug.Log("InGetStandByTime");
+        Debug.Log("StandByTime = " + StandbyTime);
+        Debug.Log("OutGetStandByTime");
         return StandbyTime;
     }
 
