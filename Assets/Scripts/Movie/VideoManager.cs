@@ -14,7 +14,12 @@ public class VideoManager : MonoBehaviour
     [SerializeField, Tooltip("Video Player を持つオブジェクト")]
     private GameObject _gameObject;
 
+    [SerializeField] GameObject BackGroundPanel;
     [SerializeField] GameObject IconSelectPanel;
+
+    private bool once = true;//動画の再生を何度も呼ばないためのbool
+
+    public int ReturnState;//動画終了後に遷移するStateの管理。MovieButtonScriptで使用
 
     VideoPlayer _videoPlayer;
 
@@ -29,7 +34,7 @@ public class VideoManager : MonoBehaviour
     void Update()
     {
         //GameModeがMovieなら動画を再生する
-        if (GameManager.Instance.IsMovie)
+        if (GameManager.Instance.IsMovie && once == true)
         {
             PlayMovie();
         }/*
@@ -41,7 +46,9 @@ public class VideoManager : MonoBehaviour
 
     void PlayMovie()
     {
+        once = false;
         //動画の再生
+        BackGroundPanel.SetActive(false);
         _gameObject2.SetActive(false);
         _gameObject3.SetActive(true);
         _gameObject.SetActive(true);
@@ -51,13 +58,47 @@ public class VideoManager : MonoBehaviour
 
     public void FinishPlayingVideo(VideoPlayer vp)
     {
+        once = true;
         _videoPlayer.Stop();
-        //ここは後で押されたボタンに応じて返還地点を変えるようにする
-        Debug.Log("aaaaaa");
-        GameManager.Instance.SetCurrentState(GameManager.GameMode.IconSelect);
+        
+        GoNextState();
     }
 
-    void ResetMovie()
+    void GoNextState()
+    {
+        switch (ReturnState)
+        {
+            case 1:
+                GameManager.Instance.SetCurrentState(GameManager.GameMode.IconSelect);
+                break;
+            case 2:
+                GameManager.Instance.SetCurrentState(GameManager.GameMode.RoomSelect);
+                break;
+            default:
+                break;
+        }
+        
+    }
+
+    public void SkipVideo()
+    {
+        _videoPlayer.Stop();
+        switch (ReturnState)
+        {
+            case 1:
+                GameManager.Instance.SetCurrentState(GameManager.GameMode.IconSelect);
+                break;
+            case 2:
+                GameManager.Instance.SetCurrentState(GameManager.GameMode.RoomSelect);
+                break;
+            default:
+                GameManager.Instance.SetCurrentState(GameManager.GameMode.IconSelect);
+                break;
+        }
+        once = true;
+    }
+
+    public void ResetMovie()
     {
         _videoPlayer.Pause();
         _gameObject.SetActive(false);
