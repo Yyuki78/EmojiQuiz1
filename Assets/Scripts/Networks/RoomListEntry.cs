@@ -28,7 +28,7 @@ public class RoomListEntry : MonoBehaviour
     private void Start()
     {
         // リスト要素がクリックされたら、対応したルーム名のルームに参加する
-        //button.onClick.AddListener(() => PhotonNetwork.JoinRoom(roomName));
+        button.onClick.AddListener(() => PhotonNetwork.JoinRoom(roomName));
     }
 
     public void Activate(RoomInfo info)
