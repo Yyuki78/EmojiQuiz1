@@ -27,11 +27,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject MoviePanel;
     [SerializeField] GameObject IconSelectPanel;
     [SerializeField] GameObject RoomSelectPanel;
+    [SerializeField] GameObject InRoomPanel;
+    [SerializeField] GameObject MainGamePanel;
 
     void Awake()
     {
         Instance = this;
         SetCurrentState(GameMode.Start);
+        //SetCurrentState(GameMode.RoomSelect);
         Debug.Log(GetCurrentState());
         Debug.Log("GameManager_Awake");
     }
@@ -64,10 +67,10 @@ public class GameManager : MonoBehaviour
                 RoomSelectAction();
                 break;
             case GameMode.InRoom:
-                RoomSelectAction();
+                InRoomAction();
                 break;
             case GameMode.MainGame:
-                RoomSelectAction();
+                MainGameAction();
                 break;
             case GameMode.Result:
                 EndAction();
@@ -99,6 +102,20 @@ public class GameManager : MonoBehaviour
         MoviePanel.SetActive(false);
         IconSelectPanel.SetActive(true);
         RoomSelectPanel.SetActive(true);
+        InRoomPanel.SetActive(false);
+    }
+    void InRoomAction()
+    {
+        IconSelectPanel.SetActive(false);
+        RoomSelectPanel.SetActive(false);
+        InRoomPanel.SetActive(true);
+        MainGamePanel.SetActive(false);
+    }
+    void MainGameAction()
+    {
+        InRoomPanel.SetActive(false);
+        MainGamePanel.SetActive(true);
+        MainGameManager.mainmode = MainGameManager.MainGameMode.LoadGame;
     }
     // EndÇ…Ç»Ç¡ÇΩÇ∆Ç´ÇÃèàóù
     void EndAction()

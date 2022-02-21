@@ -16,6 +16,8 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     }
 
     [SerializeField]
+    GameObject LoadingBoard;
+    [SerializeField]
     GameObject AnswerBoard;
     [SerializeField]
     GameObject ChoiceBoard;
@@ -31,11 +33,11 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     public static float modetime;//後でprivateに変える//モードを切り替えるまでの時間をとる
     private int SST;//SendServerTimeで受け取ったServerTimeを保持
     private byte[] playerOrder;//出題者の順番を保持
-    private bool sendall;//
-    private int playernumber;
-    private byte myAnswer;
-    private byte[] ourAnswer;
-    private bool questioner;
+    private bool sendall;//データを全体に送信したかを受け取る
+    private int playernumber;//ルーム内のプレイヤーの人数を取る
+    private byte myAnswer;//自身の答えを保持
+    private byte[] ourAnswer;//皆の答えを保持
+    private bool questioner;//出題者か否かを保持
 
     private PhotonView M_photonView;
     private NetworkOperate M_operate;
@@ -43,7 +45,6 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     void Start()
     {
         preSetting = true;
-        mainmode = MainGameMode.LoadGame;
         M_photonView = this.GetComponent<PhotonView>();
         M_operate = this.GetComponent<NetworkOperate>();
     }
@@ -150,13 +151,19 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     }
     private void preLG()
     {
-        playernumber = PhotonNetwork.PlayerList.Length;
+        playcount++;
+        LoadingBoard.SetActive(true);
+        //playernumber = PhotonNetwork.PlayerList.Length;
+        playernumber = 4;
+        //スタートの時間を受け取り
         SST = PhotonNetwork.ServerTimestamp;
         M_photonView.RPC(nameof(M_operate.SendServerTime), RpcTarget.MasterClient, SST);
         SST = M_operate.getStandbyTime();
+        
+        //出題者の順番を決定
         if (PhotonNetwork.IsMasterClient)
         {
-            Shuffle(/*(byte)playernumber*/ 5);
+            Shuffle(/*(byte)playernumber + 1*/ 5);
         }
         M_photonView.RPC(nameof(M_operate.SelectPlayer), RpcTarget.MasterClient, playerOrder[playcount%playernumber]);
         Debug.Log(playerOrder[playcount % playernumber]);
@@ -164,13 +171,15 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     }
     private void prePS()
     {
+        //自分のプレイヤー番号と比較して出題者を取得
         //questioner = (PhotonNetwork.PlayerList.)
         questioner = Random.value > 0.5f;
+        LoadingBoard.SetActive(false);
         switch (playernumber)
         {
-            case 3: AnswerersBoard[0].SetActive(false); break;
-            case 4: AnswerersBoard[1].SetActive(false); break;
-            case 5: AnswerersBoard[2].SetActive(false); break;
+            case 2: AnswerersBoard[0].SetActive(false); break;
+            case 3: AnswerersBoard[1].SetActive(false); break;
+            case 4: AnswerersBoard[2].SetActive(false); break;
             default: AnswerersBoard[2].SetActive(false); break;
         }
         if (questioner)
@@ -182,7 +191,6 @@ public class MainGameManager : MonoBehaviourPunCallbacks
             PlayerMode[1].SetActive(true);
         }
         modetime = 3.0f;
-        playcount++;
         //M_photonView.RPC(nameof(M_operate.OperateQuestion), RpcTarget.MasterClient, 絵文字の選択肢番号のbyte配列, 答えの番号);
         preSetting = false; 
     }
@@ -220,6 +228,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     }
     private void preSA()
     {
+        playcount++;
         SST = PhotonNetwork.ServerTimestamp;
         M_photonView.RPC(nameof(M_operate.SendServerTime), RpcTarget.MasterClient, SST);
         SST = M_operate.getStandbyTime();
@@ -227,9 +236,9 @@ public class MainGameManager : MonoBehaviourPunCallbacks
         AnswerBoard.SetActive(false);
         switch (playernumber)
         {
-            case 3: AnswerersBoard[0].SetActive(true); break;
-            case 4: AnswerersBoard[1].SetActive(true); break;
-            case 5: AnswerersBoard[2].SetActive(true); break;
+            case 2: AnswerersBoard[0].SetActive(true); break;
+            case 3: AnswerersBoard[1].SetActive(true); break;
+            case 4: AnswerersBoard[2].SetActive(true); break;
             default: AnswerersBoard[2].SetActive(true); break; 
         }
         preSetting = false;

@@ -19,7 +19,7 @@ public class SampleScene : MonoBehaviourPunCallbacks
     {
         //PhotonNetwork.JoinLobby();
         // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
-        PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 5 }, TypedLobby.Default);
+        //PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 5 }, TypedLobby.Default);
     }
 
     // マッチングが成功した時に呼ばれるコールバック
@@ -27,7 +27,7 @@ public class SampleScene : MonoBehaviourPunCallbacks
     {
         // マッチング後、ランダムな位置に自分自身のネットワークオブジェクトを生成する
         Debug.Log("JoinRoom");
-        GameManager.Instance.SetCurrentState(GameManager.GameMode.MainGame);
+        GameManager.Instance.SetCurrentState(GameManager.GameMode.InRoom);
         //var v = new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
         //PhotonNetwork.Instantiate("GamePlayer", v, Quaternion.identity);
     }
@@ -47,5 +47,10 @@ public class SampleScene : MonoBehaviourPunCallbacks
     public void JorCRoom4()
     {
         PhotonNetwork.JoinOrCreateRoom("room4", new RoomOptions() { MaxPlayers = 5 }, TypedLobby.Default);
+    }
+    public void LeaveInRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+        GameManager.Instance.SetCurrentState(GameManager.GameMode.RoomSelect);
     }
 }
