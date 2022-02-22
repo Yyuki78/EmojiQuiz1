@@ -14,6 +14,7 @@ public class PopUpStamp : MonoBehaviour
     //GameObject型の変数を宣言　ボタンオブジェクトを入れる箱
     private GameObject button_ob;
 
+    /*
     //stampImage1～10の浮き上がるオブジェクト
     [SerializeField] private Image PopupImage1;
     [SerializeField] private Image PopupImage2;
@@ -24,7 +25,7 @@ public class PopUpStamp : MonoBehaviour
     [SerializeField] private Image PopupImage7;
     [SerializeField] private Image PopupImage8;
     [SerializeField] private Image PopupImage9;
-    [SerializeField] private Image PopupImage10;
+    [SerializeField] private Image PopupImage10;*/
 
     //
     [SerializeField] GameObject canvas;
@@ -32,10 +33,14 @@ public class PopUpStamp : MonoBehaviour
     private Image PrefabImage;
     private GameObject obj;
 
-    private void Start()
+    //private StampManager stampManager;
+
+    private void Awake()
     {
         obj = (GameObject)Instantiate(popupPrefab);
         PrefabImage = popupPrefab.GetComponent<Image>();
+
+        //stampManager = GameObject.FindWithTag("StampManager").GetComponent<StampManager>();
     }
 
     //ボタンにこの関数を割り当てて使用
@@ -52,6 +57,7 @@ public class PopUpStamp : MonoBehaviour
 
                 obj = Instantiate(popupPrefab);
                 obj.transform.SetParent(button_ob.transform, false);
+                //stampManager.Fire(button_ob.transform.position);
 
                 break;
             case "stampImage2":
@@ -59,14 +65,16 @@ public class PopUpStamp : MonoBehaviour
 
                 obj = Instantiate(popupPrefab);
                 obj.transform.SetParent(button_ob.transform, false);
-                
+                //stampManager.Fire(button_ob.transform.position);
+
                 break;
             case "stampImage3":
                 PrefabImage.sprite = Resources.Load<Sprite>("StampImage/3");
 
                 obj = Instantiate(popupPrefab);
                 obj.transform.SetParent(button_ob.transform, false);
-                
+                //stampManager.Fire(button_ob.transform.position);
+
                 break;
             case "stampImage4":
                 PrefabImage.sprite = Resources.Load<Sprite>("StampImage/4");
