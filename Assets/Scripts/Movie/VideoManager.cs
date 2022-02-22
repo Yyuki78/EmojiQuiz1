@@ -68,6 +68,9 @@ public class VideoManager : MonoBehaviour
     {
         switch (ReturnState)
         {
+            case 0:
+                GameManager.Instance.SetCurrentState(GameManager.GameMode.IconSelect);
+                break;
             case 1:
                 GameManager.Instance.SetCurrentState(GameManager.GameMode.IconSelect);
                 break;
@@ -75,6 +78,7 @@ public class VideoManager : MonoBehaviour
                 GameManager.Instance.SetCurrentState(GameManager.GameMode.RoomSelect);
                 break;
             default:
+                Debug.Log("Movie‚ªI‚í‚ç‚È‚¢");
                 break;
         }
         
