@@ -12,18 +12,34 @@ public class PopUpEffect : MonoBehaviour
     //float型を変数speedで宣言して最初の値は5とします。
     private float speed = 1f;
 
+    public bool IsActive => gameObject.activeSelf;
+
     Image mesh;
 
-    void Start()
+    private void Start()
     {
         pos = transform.position;
         mesh = GetComponent<Image>();
         mesh.color = mesh.color - new Color32(0, 0, 0, 20);
+        //GetComponentでRigidbodyを取得して変数rigidで参照します。
+        rigid = GetComponent<Rigidbody>();
+
+        StartCoroutine("PopUp");
+    }
+
+    public void Init(Vector3 origin)
+    {
+        pos = origin;
+        mesh = GetComponent<Image>();
+        mesh.color = new Color32(255, 255, 255, 235);
 
         //GetComponentでRigidbodyを取得して変数rigidで参照します。
         rigid = GetComponent<Rigidbody>();
         //1.5秒後に終わり
         //Invoke(nameof(VanishMethod), 1.5f);
+
+        gameObject.SetActive(true);
+
         StartCoroutine("PopUp");
     }
     /*
@@ -63,5 +79,10 @@ public class PopUpEffect : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
         this.gameObject.SetActive(false);
+    }
+
+    public void Deactivate()
+    {
+        gameObject.SetActive(false);
     }
 }
