@@ -37,9 +37,16 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
     GameObject QuestionerPanel;
     [SerializeField]
     GameObject AnswerersPanel;
+    //正解発表用のパネル
+    [SerializeField]
+    GameObject CorrectAnswerersPanel;
     //画面切り替え時の演出
     [SerializeField]
     GameObject ChangeImage1;
+
+    //マスターの番号
+    public static int MasterNum;
+
 
     public static MainGameMode mainmode;//現在のモード
     private static MainGameMode premainmode;//変更先のモード
@@ -187,6 +194,7 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
         //時間がないので、取り合えずマスターが10問出題する形で実装
         if (PhotonNetwork.LocalPlayer.IsMasterClient)
         {
+            MasterNum = MatchmakingView.PlayerNum;
             questioner = true;
         }
         else
@@ -217,7 +225,7 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
         Debug.Log("ゲームを始めます");
         mainmode = MainGameMode.QuestionTime;
         //yield return new WaitForSeconds(1.0f);
-        //ここでサーバー時間同期をしたい
+        
         if (questioner)
         {
             QuestionerPanel.SetActive(true);
@@ -228,6 +236,27 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
             QuestionerPanel.SetActive(false);
             AnswerersPanel.SetActive(true);
         }
+        yield return new WaitForSeconds(0.5f);
+
+        //ここで時間の管理
+        //ここでサーバー時間同期をしたい
+
+
+        yield return new WaitForSeconds(16.0f);
+        //ここから正解発表
+        QuestionerPanel.SetActive(false);
+        AnswerersPanel.SetActive(false);
+
+        StartCoroutine("CorrectAnswer");
+        yield break;
+    }
+
+    private IEnumerator CorrectAnswer()
+    {
+        mainmode = MainGameMode.ShareAnswer;
+        Debug.Log("正解発表に移ります");
+        CorrectAnswerersPanel.SetActive(true);
+
         
         yield break;
     }

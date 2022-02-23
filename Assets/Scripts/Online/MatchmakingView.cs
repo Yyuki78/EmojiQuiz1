@@ -10,7 +10,8 @@ public class MatchmakingView : MonoBehaviourPunCallbacks
     private List<RoomButton> roomButtonList = new List<RoomButton>();
     private CanvasGroup canvasGroup;
 
-    public int PlayerNum = 0;
+    //Player‚Ì”Ô†
+    public static int PlayerNum = 0;
 
     IconDisplay _iconDisplay;
 

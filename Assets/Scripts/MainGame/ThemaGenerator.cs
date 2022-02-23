@@ -29,6 +29,9 @@ public class ThemaGenerator : MonoBehaviour
     public byte[] _choicesBytes4;//選択肢4のbyte型
     public byte[] _choicesBytes5;//選択肢5のbyte型
 
+    //答えの選択肢番号
+    public int CorrectPos;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -173,6 +176,10 @@ public class ThemaGenerator : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             Debug.Log((i + 1) + "番目は" + _choicesNum[i]);
+            if (_choicesNum[i] == _themaNum)
+            {
+                CorrectPos = i + 1;
+            }
         }
         EmojiImage1.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[_choicesNum[0]]);
         EmojiImage2.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[_choicesNum[1]]);
@@ -185,6 +192,8 @@ public class ThemaGenerator : MonoBehaviour
     //数字を受け取って表示
     public void Showchoices(int thema, int[] choices)
     {
+        _themaNum = thema;
+        _choicesNum = choices;
         EmojiImage.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[thema]);
         EmojiImage1.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[choices[0]]);
         EmojiImage2.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[choices[1]]);
