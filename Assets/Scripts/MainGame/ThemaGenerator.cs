@@ -181,4 +181,15 @@ public class ThemaGenerator : MonoBehaviour
         EmojiImage5.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[_choicesNum[4]]);
 
     }
+
+    //êîéöÇéÛÇØéÊÇ¡Çƒï\é¶
+    public void Showchoices(int thema, int[] choices)
+    {
+        EmojiImage.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[thema]);
+        EmojiImage1.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[choices[0]]);
+        EmojiImage2.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[choices[1]]);
+        EmojiImage3.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[choices[2]]);
+        EmojiImage4.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[choices[3]]);
+        EmojiImage5.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[choices[4]]);
+    }
 }
