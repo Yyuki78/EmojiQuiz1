@@ -15,7 +15,10 @@ public class MovieButton : MonoBehaviour
     // ボタンが押された場合、今回呼び出される関数
     public void OnClick()
     {
-        if (GameManager.Instance.GetCurrentState() == GameManager.GameMode.IconSelect)
+        if(GameManager.Instance.GetCurrentState() == GameManager.GameMode.Start)
+        {
+            a.ReturnState = 0;
+        }else if (GameManager.Instance.GetCurrentState() == GameManager.GameMode.IconSelect)
         {
             a.ReturnState = 1;
         }else if(GameManager.Instance.GetCurrentState() == GameManager.GameMode.RoomSelect)

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;//Image型を扱うために導入
@@ -25,6 +26,9 @@ public class IconSelect : MonoBehaviour
         Debug.Log(button_ob.name);
         EmojiImage.sprite = Resources.Load<Sprite>("Image/"+ button_ob.name);
         OKbutton.SetActive(true);
+        //Playerの名前とスコアを絵文字番号にする
+        PhotonNetwork.NickName = button_ob.name;
+        PhotonNetwork.LocalPlayer.SetScore(int.Parse(button_ob.name));
     }
     /*
     //「1」ボタンが押された時の動作。Imageオブジェクトに1の画像を表示させる

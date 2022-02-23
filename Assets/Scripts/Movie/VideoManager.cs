@@ -68,13 +68,20 @@ public class VideoManager : MonoBehaviour
     {
         switch (ReturnState)
         {
+            case 0:
+                GameManager.Instance.SetCurrentState(GameManager.GameMode.IconSelect);
+                break;
             case 1:
                 GameManager.Instance.SetCurrentState(GameManager.GameMode.IconSelect);
                 break;
             case 2:
                 GameManager.Instance.SetCurrentState(GameManager.GameMode.RoomSelect);
                 break;
+            case 3:
+                GameManager.Instance.SetCurrentState(GameManager.GameMode.InRoom);
+                break;
             default:
+                Debug.Log("Movie‚ªI‚í‚ç‚È‚¢");
                 break;
         }
         
@@ -85,14 +92,20 @@ public class VideoManager : MonoBehaviour
         _videoPlayer.Stop();
         switch (ReturnState)
         {
+            case 0:
+                GameManager.Instance.SetCurrentState(GameManager.GameMode.IconSelect);
+                break;
             case 1:
                 GameManager.Instance.SetCurrentState(GameManager.GameMode.IconSelect);
                 break;
             case 2:
                 GameManager.Instance.SetCurrentState(GameManager.GameMode.RoomSelect);
                 break;
+            case 3:
+                GameManager.Instance.SetCurrentState(GameManager.GameMode.InRoom);
+                break;
             default:
-                GameManager.Instance.SetCurrentState(GameManager.GameMode.IconSelect);
+                Debug.Log("Movie‚ªI‚í‚ç‚È‚¢");
                 break;
         }
         once = true;

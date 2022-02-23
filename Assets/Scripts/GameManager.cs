@@ -26,7 +26,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject MoviePanel;
     [SerializeField] GameObject IconSelectPanel;
-    [SerializeField] GameObject RoomSelectPanel;
+    [SerializeField] GameObject RoomSelectPanel1;
+    [SerializeField] GameObject RoomSelectPanel2;
+    [SerializeField] GameObject RoomSelectPanel3;
+    [SerializeField] GameObject RoomSelectPanel4;
     [SerializeField] GameObject InRoomPanel;
     [SerializeField] GameObject MainGamePanel;
 
@@ -101,13 +104,19 @@ public class GameManager : MonoBehaviour
         Debug.Log("RoomSelectMode");
         MoviePanel.SetActive(false);
         IconSelectPanel.SetActive(true);
-        RoomSelectPanel.SetActive(true);
+        RoomSelectPanel1.SetActive(true);
+        RoomSelectPanel2.SetActive(true);
+        RoomSelectPanel3.SetActive(true);
+        RoomSelectPanel4.SetActive(true);
         InRoomPanel.SetActive(false);
     }
     void InRoomAction()
     {
         IconSelectPanel.SetActive(false);
-        RoomSelectPanel.SetActive(false);
+        RoomSelectPanel1.SetActive(false);
+        RoomSelectPanel2.SetActive(false);
+        RoomSelectPanel3.SetActive(false);
+        RoomSelectPanel4.SetActive(false);
         InRoomPanel.SetActive(true);
         MainGamePanel.SetActive(false);
     }
