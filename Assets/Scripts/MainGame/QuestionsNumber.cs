@@ -57,4 +57,13 @@ public class QuestionsNumber : MonoBehaviour
             }
         }
     }
+
+    public void Init()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Num[i].gameObject.SetActive(false);
+        }
+        once = true;
+    }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
+using Photon.PUN;
 
 public class ShareAnswer : MonoBehaviourPunCallbacks
 {
@@ -305,5 +305,31 @@ public class ShareAnswer : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(4.5f);
         Debug.Log("ê≥âî≠ï\ÇèIóπÇµÇ‹Ç∑");
         yield break;
+    }
+
+    public void Init()
+    {
+        QustionerImage.gameObject.SetActive(false);
+        CorrectImage.gameObject.SetActive(false);
+        IconImage1.gameObject.SetActive(false);
+        IconImage2.gameObject.SetActive(false);
+        IconImage3.gameObject.SetActive(false);
+        IconImage4.gameObject.SetActive(false);
+        AnswerImage1.gameObject.SetActive(false);
+        AnswerImage2.gameObject.SetActive(false);
+        AnswerImage3.gameObject.SetActive(false);
+        AnswerImage4.gameObject.SetActive(false);
+        Correct1.gameObject.SetActive(false);
+        Correct2.gameObject.SetActive(false);
+        Correct3.gameObject.SetActive(false);
+        Correct4.gameObject.SetActive(false);
+        inCorrect1.gameObject.SetActive(false);
+        inCorrect2.gameObject.SetActive(false);
+        inCorrect3.gameObject.SetActive(false);
+        inCorrect4.gameObject.SetActive(false);
+        MasCorrect.gameObject.SetActive(false);
+        MasinCorrect.gameObject.SetActive(false);
+
+        once = true;
     }
 }

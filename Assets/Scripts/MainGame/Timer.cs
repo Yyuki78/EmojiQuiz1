@@ -87,4 +87,14 @@ public class Timer : MonoBehaviour
             Timers[Num].gameObject.SetActive(false);
         }
     }
+
+    public void Init()
+    {
+        for (int i = 0; i < 18; i++)
+        {
+            Timers[i].gameObject.SetActive(false);
+        }
+        once = true;
+        Num = 18;
+    }
 }

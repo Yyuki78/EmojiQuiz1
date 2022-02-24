@@ -15,6 +15,7 @@ public class ResultManager : MonoBehaviour
     [SerializeField] GameObject MoviePanel;//Result時に非表示されるもの(後から増える)
     [SerializeField] GameObject ResultPanel;//Resultが表示されるPanel
     [SerializeField] GameObject ChangeImage;//Loadに使用する
+    ChangeImage _changeImage;
 
     //スコアを表示する
     [SerializeField] GameObject Score1;
@@ -41,6 +42,8 @@ public class ResultManager : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
+        _changeImage = ChangeImage.GetComponent<ChangeImage>();
+
         _score1 = Score1.GetComponent<ScoreManager>();
         _score2 = Score2.GetComponent<ScoreManager>();
         _score3 = Score3.GetComponent<ScoreManager>();
@@ -64,7 +67,7 @@ public class ResultManager : MonoBehaviour
 
     private IEnumerator Load()
     {
-        ChangeImage.SetActive(true);
+        _changeImage.Init();
         // 指定秒間待つ
         yield return new WaitForSeconds(0.65f);
         
@@ -80,10 +83,10 @@ public class ResultManager : MonoBehaviour
     {
         Debug.Log("ShowResult");
         yield return new WaitForSeconds(2.5f);
-        _score1.show(Sample1);
-        _score2.show(Sample2);
-        _score3.show(Sample3);
-        _score4.show(Sample4);
-        _score5.show(Sample5);
+        _score1.show(ShareAnswer.answer1);
+        _score2.show(ShareAnswer.answer2);
+        _score3.show(ShareAnswer.answer3);
+        _score4.show(ShareAnswer.answer4);
+        _score5.show(ShareAnswer.answer5);
     }
 }

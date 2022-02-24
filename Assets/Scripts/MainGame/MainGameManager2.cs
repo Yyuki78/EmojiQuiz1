@@ -42,12 +42,13 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
     GameObject CorrectAnswerersPanel;
     //画面切り替え時の演出
     [SerializeField]
-    GameObject ChangeImage1;
-    [SerializeField]
-    GameObject ChangeImage2;
+    GameObject ChangeImage;
+    ChangeImage _changeImage;
     //タイマーの表示
     [SerializeField]
     GameObject Timer;
+    //ゲーム開始時に初期化するスクリプト
+    ResetGame _reset;
 
     //マスターの番号
     public static int MasterNum;
@@ -74,6 +75,9 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
         preSetting = true;
         M_photonView = this.GetComponent<PhotonView>();
         M_operate = this.GetComponent<NetworkOperate>();
+
+        _changeImage = ChangeImage.GetComponent<ChangeImage>();
+        _reset = GetComponent<ResetGame>();
     }
 
     // Update is called once per frame
@@ -195,6 +199,7 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
         playcount++;
 
         Debug.Log("ロード画面＋解答者出題者の発表をします");
+        LoadingBoard.SetActive(true);
         mainmode = MainGameMode.PlayerSelect;
         yield return new WaitForSeconds(0.2f);
 
@@ -220,7 +225,7 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
         }
         yield return new WaitForSeconds(4.0f);
 
-        ChangeImage1.SetActive(true);
+        _changeImage.Init();
         // 指定秒間待つ
         yield return new WaitForSeconds(0.67f);
         LoadingBoard.SetActive(false);
@@ -251,7 +256,7 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
 
         yield return new WaitForSeconds(17.5f);
 
-        ChangeImage2.SetActive(true);
+        _changeImage.Init();
         // 指定秒間待つ
         yield return new WaitForSeconds(0.67f);
 
@@ -269,10 +274,36 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
         Debug.Log("正解発表に移ります");
         CorrectAnswerersPanel.SetActive(true);
 
-        
+        yield return new WaitForSeconds(15.5f);//今正解発表中
+        if (playcount == 10)
+        {
+            GameManager.Instance.SetCurrentState(GameManager.GameMode.Result);
+            yield break;
+        }
+        _reset.ResetAll();
         yield break;
     }
 
+
+    //ゲーム終了時に初期化する
+    public void Init()
+    {
+        mainmode = MainGameMode.ReportQuestion;
+        _changeImage.Init();
+
+        LoadingBoard.SetActive(false);
+        AnswerBoard.SetActive(false);
+        ChoiceBoard.SetActive(false);
+
+        QuestionerText.SetActive(false);
+        AnswerersText.SetActive(false);
+        QuestionerPanel.SetActive(false);
+        AnswerersPanel.SetActive(false);
+        CorrectAnswerersPanel.SetActive(false);
+        //Timer.SetActive(false);
+        Debug.Log((playcount + 1) + "週目のゲームを開始します");
+        preSetting = true;
+    }
 
     private void preLG()
     {
