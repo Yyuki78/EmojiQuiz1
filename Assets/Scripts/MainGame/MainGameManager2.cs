@@ -43,6 +43,11 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
     //画面切り替え時の演出
     [SerializeField]
     GameObject ChangeImage1;
+    [SerializeField]
+    GameObject ChangeImage2;
+    //タイマーの表示
+    [SerializeField]
+    GameObject Timer;
 
     //マスターの番号
     public static int MasterNum;
@@ -186,6 +191,9 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
     }
     private IEnumerator Load()
     {
+        //何週目か
+        playcount++;
+
         Debug.Log("ロード画面＋解答者出題者の発表をします");
         mainmode = MainGameMode.PlayerSelect;
         yield return new WaitForSeconds(0.2f);
@@ -225,7 +233,6 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
         Debug.Log("ゲームを始めます");
         mainmode = MainGameMode.QuestionTime;
         //yield return new WaitForSeconds(1.0f);
-        
         if (questioner)
         {
             QuestionerPanel.SetActive(true);
@@ -236,13 +243,18 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
             QuestionerPanel.SetActive(false);
             AnswerersPanel.SetActive(true);
         }
-        yield return new WaitForSeconds(0.5f);
-
+        Timer.SetActive(true);
+        yield return new WaitForSeconds(1.0f);
         //ここで時間の管理
         //ここでサーバー時間同期をしたい
 
 
-        yield return new WaitForSeconds(16.0f);
+        yield return new WaitForSeconds(17.5f);
+
+        ChangeImage2.SetActive(true);
+        // 指定秒間待つ
+        yield return new WaitForSeconds(0.67f);
+
         //ここから正解発表
         QuestionerPanel.SetActive(false);
         AnswerersPanel.SetActive(false);

@@ -26,8 +26,34 @@ public class ShareAnswer : MonoBehaviourPunCallbacks
     [SerializeField] Image AnswerImage4 = null;//Emoji画像を表示させるImageオブジェクト
     public Image[] AnswerImage = new Image[4];
 
+    //正解と不正解の画像
+    [SerializeField] Image Correct1 = null;
+    [SerializeField] Image Correct2 = null;
+    [SerializeField] Image Correct3 = null;
+    [SerializeField] Image Correct4 = null;
+    public Image[] Correct = new Image[4];
+
+    [SerializeField] Image inCorrect1 = null;
+    [SerializeField] Image inCorrect2 = null;
+    [SerializeField] Image inCorrect3 = null;
+    [SerializeField] Image inCorrect4 = null;
+    public Image[] inCorrect = new Image[4];
+
+    [SerializeField] Image MasCorrect = null;
+    [SerializeField] Image MasinCorrect = null;
+
     private int i = 0;
     private int k = 0;
+    //正解数と不正解数
+    private int maru = 0;
+    private int batu = 0;
+
+    //全体の正解不正解を持つbool[正解か不正解か]
+    public static bool[] answer1 = new bool[10];
+    public static bool[] answer2 = new bool[10];
+    public static bool[] answer3 = new bool[10];
+    public static bool[] answer4 = new bool[10];
+    public static bool[] answer5 = new bool[10];
 
 
     // Start is called before the first frame update
@@ -45,6 +71,16 @@ public class ShareAnswer : MonoBehaviourPunCallbacks
         AnswerImage[2] = AnswerImage3;
         AnswerImage[3] = AnswerImage4;
 
+        Correct[0] = Correct1;
+        Correct[1] = Correct2;
+        Correct[2] = Correct3;
+        Correct[3] = Correct4;
+
+        inCorrect[0] = inCorrect1;
+        inCorrect[1] = inCorrect2;
+        inCorrect[2] = inCorrect3;
+        inCorrect[3] = inCorrect4;
+
         QustionerImage.gameObject.SetActive(false);
         CorrectImage.gameObject.SetActive(false);
         IconImage1.gameObject.SetActive(false);
@@ -55,6 +91,16 @@ public class ShareAnswer : MonoBehaviourPunCallbacks
         AnswerImage2.gameObject.SetActive(false);
         AnswerImage3.gameObject.SetActive(false);
         AnswerImage4.gameObject.SetActive(false);
+        Correct1.gameObject.SetActive(false);
+        Correct2.gameObject.SetActive(false);
+        Correct3.gameObject.SetActive(false);
+        Correct4.gameObject.SetActive(false);
+        inCorrect1.gameObject.SetActive(false);
+        inCorrect2.gameObject.SetActive(false);
+        inCorrect3.gameObject.SetActive(false);
+        inCorrect4.gameObject.SetActive(false);
+        MasCorrect.gameObject.SetActive(false);
+        MasinCorrect.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -126,8 +172,137 @@ public class ShareAnswer : MonoBehaviourPunCallbacks
         //ここから正解の表示と正解不正解の表示
         CorrectImage.sprite = Resources.Load<Sprite>("Image/" + _themaGenerator._themaNum);
         CorrectImage.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        k = 0;
+        maru = 0;
+        batu = 0;
+        foreach (var player in players2)
+        {
+            if (player.IsMasterClient) continue;
+            if(player.GetChoiceNum()== _themaGenerator._themaNum)
+            {
+                Debug.Log("正解");
+                Correct[k].gameObject.SetActive(true);
+                maru++;
+            }
+            else
+            {
+                Debug.Log("不正解");
+                inCorrect[k].gameObject.SetActive(true);
+                batu++;
+            }
+            AnswerImage[k].sprite = Resources.Load<Sprite>("Image/" + player.GetChoiceNum());
+            
+            k++;
+        }
+        yield return new WaitForSeconds(1.0f);
+        if (maru >= batu)
+        {
+            Debug.Log("半分以上が正解");
+            MasCorrect.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("過半数が不正解");
+            MasinCorrect.gameObject.SetActive(true);
+        }
 
-        yield return new WaitForSeconds(5.0f);
+        //ここから正解不正解を格納する
+        k = 0;
+        foreach (var player in players2)
+        {
+            k++;
+            if (player.IsMasterClient)
+            {
+                if (maru >= batu)
+                {
+                    switch (k)
+                    {
+                        case 1:
+                            answer1[MainGameManager2.playcount - 1] = true;
+                            break;
+                        case 2:
+                            answer2[MainGameManager2.playcount - 1] = true;
+                            break;
+                        case 3:
+                            answer3[MainGameManager2.playcount - 1] = true;
+                            break;
+                        case 4:
+                            answer4[MainGameManager2.playcount - 1] = true;
+                            break;
+                        case 5:
+                            answer5[MainGameManager2.playcount - 1] = true;
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (k)
+                    {
+                        case 1:
+                            answer1[MainGameManager2.playcount - 1] = false;
+                            break;
+                        case 2:
+                            answer2[MainGameManager2.playcount - 1] = false;
+                            break;
+                        case 3:
+                            answer3[MainGameManager2.playcount - 1] = false;
+                            break;
+                        case 4:
+                            answer4[MainGameManager2.playcount - 1] = false;
+                            break;
+                        case 5:
+                            answer5[MainGameManager2.playcount - 1] = false;
+                            break;
+                    }
+                }
+                continue;
+            }
+            if (player.GetChoiceNum() == _themaGenerator._themaNum)
+            {
+                switch (k)
+                {
+                    case 1:
+                        answer1[MainGameManager2.playcount - 1] = true;
+                        break;
+                    case 2:
+                        answer2[MainGameManager2.playcount - 1] = true;
+                        break;
+                    case 3:
+                        answer3[MainGameManager2.playcount - 1] = true;
+                        break;
+                    case 4:
+                        answer4[MainGameManager2.playcount - 1] = true;
+                        break;
+                    case 5:
+                        answer5[MainGameManager2.playcount - 1] = true;
+                        break;
+                }
+            }
+            else
+            {
+                switch (k)
+                {
+                    case 1:
+                        answer1[MainGameManager2.playcount - 1] = false;
+                        break;
+                    case 2:
+                        answer2[MainGameManager2.playcount - 1] = false;
+                        break;
+                    case 3:
+                        answer3[MainGameManager2.playcount - 1] = false;
+                        break;
+                    case 4:
+                        answer4[MainGameManager2.playcount - 1] = false;
+                        break;
+                    case 5:
+                        answer5[MainGameManager2.playcount - 1] = false;
+                        break;
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(4.5f);
         Debug.Log("正解発表を終了します");
         yield break;
     }
