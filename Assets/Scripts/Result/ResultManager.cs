@@ -35,7 +35,7 @@ public class ResultManager : MonoBehaviour
     private bool[] Sample4 = new bool[10] { true, false, true, true, false, true, true, false, true, true };
     private bool[] Sample5 = new bool[10] { false, false, false, false, false, false, true, true, false, true };
 
-
+    ShowIcon _showIcon;
 
     private bool once = true;//コルーチンを一度だけ起動するためのbool
     
@@ -49,6 +49,8 @@ public class ResultManager : MonoBehaviour
         _score3 = Score3.GetComponent<ScoreManager>();
         _score4 = Score4.GetComponent<ScoreManager>();
         _score5 = Score5.GetComponent<ScoreManager>();
+
+        _showIcon = GetComponent<ShowIcon>();
     }
 
     // Update is called once per frame
@@ -74,6 +76,8 @@ public class ResultManager : MonoBehaviour
         //ここで画面を切り替える
         MoviePanel.SetActive(false);
         ResultPanel.SetActive(true);
+
+        StartCoroutine(_showIcon.showIcon());
 
         StartCoroutine("ShowResult");
         yield break;

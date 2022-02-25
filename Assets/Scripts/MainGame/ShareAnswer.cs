@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.PUN;
+using Photon.Pun;
 
 public class ShareAnswer : MonoBehaviourPunCallbacks
 {
@@ -163,11 +163,11 @@ public class ShareAnswer : MonoBehaviourPunCallbacks
         }
         for (int j = 0; j < 4; j++)
         {
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(0.75f);
             AnswerImage[j].gameObject.SetActive(true);
         }
 
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(2.0f);
 
         //ここから正解の表示と正解不正解の表示
         CorrectImage.sprite = Resources.Load<Sprite>("Image/" + _themaGenerator._themaNum);
@@ -191,11 +191,10 @@ public class ShareAnswer : MonoBehaviourPunCallbacks
                 inCorrect[k].gameObject.SetActive(true);
                 batu++;
             }
-            AnswerImage[k].sprite = Resources.Load<Sprite>("Image/" + player.GetChoiceNum());
-            
+
             k++;
         }
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.2f);
         if (maru >= batu)
         {
             Debug.Log("半分以上が正解");
@@ -302,7 +301,7 @@ public class ShareAnswer : MonoBehaviourPunCallbacks
             }
         }
 
-        yield return new WaitForSeconds(4.5f);
+        yield return new WaitForSeconds(3.8f);
         Debug.Log("正解発表を終了します");
         yield break;
     }

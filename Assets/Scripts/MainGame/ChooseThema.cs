@@ -20,25 +20,20 @@ public class ChooseThema : MonoBehaviourPunCallbacks
     {
         if (GameManager.Instance.GetCurrentState() == GameManager.GameMode.MainGame)
         {
-            if (PhotonNetwork.LocalPlayer.IsMasterClient)
+            if (MainGameManager2.MainGameMode.PlayerSelect == MainGameManager2.mainmode)
             {
-                if (once == true)
+                if (PhotonNetwork.LocalPlayer.IsMasterClient)
                 {
-                    Debug.Log("ñ‚ëËÇçÏê¨ÇµÇ‹Ç∑");
-                    _themaGenerator.ThemaGenerate();
-                    _themaGenerator.ChoicesGenerate();
-                    await Task.Delay(5000);
-                    photonView.RPC(nameof(RpcSendMessage), RpcTarget.All, _themaGenerator._themaNum, _themaGenerator._choicesNum);
-                    once = false;
+                    if (once == true)
+                    {
+                        Debug.Log("ñ‚ëËÇçÏê¨ÇµÇ‹Ç∑");
+                        once = false;
+                        _themaGenerator.ThemaGenerate();
+                        _themaGenerator.ChoicesGenerate();
+                        await Task.Delay(1000);
+                        photonView.RPC(nameof(RpcSendMessage), RpcTarget.All, _themaGenerator._themaNum, _themaGenerator._choicesNum);
+                    }
                 }
-                else
-                {
-                    
-                }
-            }
-            else
-            {
-
             }
         }
     }
@@ -53,7 +48,9 @@ public class ChooseThema : MonoBehaviourPunCallbacks
     {
         Debug.Log("Ç®ëËÇ∆ëIëéàÇéÛÇØéÊÇ¡ÇƒÇªÇÍÇºÇÍï\é¶ÅI");
         Debug.Log(thema + "," + choices[0] + "," + choices[1] + "," + choices[2] + "," + choices[3] + "," + choices[4]);
+        once = false;
         yield return new WaitForSeconds(1.0f);
+        once = false;
         _themaGenerator.Showchoices(thema, choices);
         yield break;
     }

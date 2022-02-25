@@ -28,7 +28,7 @@ public class ShowIcon2 : MonoBehaviour
         IconImage4.gameObject.SetActive(false);
     }
 
-    private IEnumerator showIcon()
+    public IEnumerator showIcon()
     {
         var players = PhotonNetwork.PlayerList;
         //ÉAÉCÉRÉìÇÃê∂ê¨

@@ -25,6 +25,7 @@ public class ResetGame : MonoBehaviour
     {
         //全てをゲーム開始状態にする
         _mainGameManager.Init();
+        _chooseThema.Init();
         _timer.Init();
         _questionNumber.Init();
         _shareAnswer.Init();
