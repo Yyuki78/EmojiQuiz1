@@ -12,11 +12,16 @@ public class MatchmakingView : MonoBehaviourPunCallbacks
 
     //Playerの番号
     public static int PlayerNum = 0;
+    public static int PlayerNum2 = 0;
+    private int PlayerCount = 0;
 
     IconDisplay _iconDisplay;
 
     [SerializeField]
     Text joinedMembersText;
+
+    [SerializeField]
+    GameObject ReadyButton;
 
     private void Start()
     {
@@ -72,6 +77,10 @@ public class MatchmakingView : MonoBehaviourPunCallbacks
     {
         GameManager.Instance.SetCurrentState(GameManager.GameMode.InRoom);
         Debug.Log(PhotonNetwork.NickName + " is joined.");
+        
+        //自分の番号を取得する
+        PlayerNum2 = PhotonNetwork.PlayerList.Length;
+
         UpdateMemberList();
         _iconDisplay.UpdateLabel();
         // ルームへの参加が成功したら、UIを非表示にする
@@ -93,17 +102,17 @@ public class MatchmakingView : MonoBehaviourPunCallbacks
 
     public void UpdateMemberList()
     {
-        PlayerNum = 0;
+        PlayerCount = 0;
         joinedMembersText.text = "";
         foreach (var p in PhotonNetwork.PlayerList)
         {
-            PlayerNum++;
+            PlayerCount++;
             joinedMembersText.text += PhotonNetwork.NickName + "\n";
         }
-        if (PlayerNum == 5)
+        if (PlayerCount == 5)
         {
-            Debug.Log("ゲームを開始します");
-            GameManager.Instance.SetCurrentState(GameManager.GameMode.MainGame);
+            Debug.Log("5人が揃いました");
+            ReadyButton.SetActive(true);
         }
     }
 }

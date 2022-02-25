@@ -22,12 +22,10 @@ public class Timer : MonoBehaviour
     [SerializeField] GameObject Timer14;
     [SerializeField] GameObject Timer15;
     [SerializeField] GameObject Timer16;
-    [SerializeField] GameObject Timer17;
-    [SerializeField] GameObject Timer18;
-    GameObject[] Timers = new GameObject[18];
+    GameObject[] Timers = new GameObject[16];
 
     private bool once = true;
-    private int Num = 18;
+    private int Num = 16;
 
     // Start is called before the first frame update
     void Awake()
@@ -48,14 +46,12 @@ public class Timer : MonoBehaviour
         Timers[13] = Timer14;
         Timers[14] = Timer15;
         Timers[15] = Timer16;
-        Timers[16] = Timer17;
-        Timers[17] = Timer18;
-        for(int i = 0; i < 18; i++)
+        for(int i = 0; i < 16; i++)
         {
             Timers[i].gameObject.SetActive(false);
         }
         once = true;
-        Num = 18;
+        Num = 16;
     }
 
     // Update is called once per frame
@@ -68,7 +64,7 @@ public class Timer : MonoBehaviour
                 if (once == true)
                 {
                     StartCoroutine("Time");
-                    for (int i = 0; i < 18; i++)
+                    for (int i = 0; i < 16; i++)
                     {
                         Timers[i].gameObject.SetActive(true);
                     }
@@ -86,5 +82,15 @@ public class Timer : MonoBehaviour
             Num--;
             Timers[Num].gameObject.SetActive(false);
         }
+    }
+
+    public void Init()
+    {
+        for (int i = 0; i < 16; i++)
+        {
+            Timers[i].gameObject.SetActive(false);
+        }
+        once = true;
+        Num = 16;
     }
 }

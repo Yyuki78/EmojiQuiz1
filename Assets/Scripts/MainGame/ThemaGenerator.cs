@@ -50,7 +50,7 @@ public class ThemaGenerator : MonoBehaviour
         {
             Debug.Log(string.Format("{0,3:X2}", b));
         }
-        EmojiImage.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[_themaNum]);
+        //EmojiImage.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[_themaNum]);
     }
 
     //Ç±Ç±Ç≈ëIëéàÇÃêîéöÇê∂ê¨Ç∑ÇÈ
@@ -181,12 +181,13 @@ public class ThemaGenerator : MonoBehaviour
                 CorrectPos = i + 1;
             }
         }
+        /*
         EmojiImage1.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[_choicesNum[0]]);
         EmojiImage2.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[_choicesNum[1]]);
         EmojiImage3.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[_choicesNum[2]]);
         EmojiImage4.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[_choicesNum[3]]);
         EmojiImage5.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[_choicesNum[4]]);
-
+        */
     }
 
     //êîéöÇéÛÇØéÊÇ¡Çƒï\é¶
@@ -194,11 +195,11 @@ public class ThemaGenerator : MonoBehaviour
     {
         _themaNum = thema;
         _choicesNum = choices;
-        EmojiImage.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[thema]);
-        EmojiImage1.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[choices[0]]);
-        EmojiImage2.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[choices[1]]);
-        EmojiImage3.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[choices[2]]);
-        EmojiImage4.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[choices[3]]);
-        EmojiImage5.sprite = Resources.Load<Sprite>(emojiInfo.imageAddress[choices[4]]);
+        EmojiImage.sprite = Resources.Load<Sprite>("Image/" + thema);
+        EmojiImage1.sprite = Resources.Load<Sprite>("Image/" + choices[0]);
+        EmojiImage2.sprite = Resources.Load<Sprite>("Image/" + choices[1]);
+        EmojiImage3.sprite = Resources.Load<Sprite>("Image/" + choices[2]);
+        EmojiImage4.sprite = Resources.Load<Sprite>("Image/" + choices[3]);
+        EmojiImage5.sprite = Resources.Load<Sprite>("Image/" + choices[4]);
     }
 }

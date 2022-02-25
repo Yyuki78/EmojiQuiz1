@@ -12,6 +12,8 @@ public class ChangeImage : MonoBehaviour
     //floatå^ÇïœêîspeedÇ≈êÈåæ
     private float speed = 20f;
 
+    private bool once = false;
+
     void Start()
     {
 
@@ -21,7 +23,16 @@ public class ChangeImage : MonoBehaviour
         rigid.MovePosition(new Vector3(pos.x, pos.y, pos.z));
         //1.5ïbå„Ç…èIÇÌÇË
         //Invoke(nameof(VanishMethod), 1.5f);
-        StartCoroutine("Change");
+        //StartCoroutine("Change");
+    }
+
+    private void Update()
+    {
+        if (once == true)
+        {
+            once = false;
+            StartCoroutine("Change");
+        }
     }
 
     public IEnumerator Change()
@@ -42,6 +53,14 @@ public class ChangeImage : MonoBehaviour
 
             yield return new WaitForSeconds(0.01f);
         }
-        this.gameObject.SetActive(false);
+        yield return new WaitForSeconds(2.0f);
+        pos = new Vector3(1450 + 512, 374, 0);
+        rigid.MovePosition(new Vector3(pos.x, pos.y, pos.z));
+        //this.gameObject.SetActive(false);
+    }
+
+    public void Init()
+    {
+        once = true;
     }
 }

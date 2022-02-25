@@ -37,17 +37,23 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
     GameObject QuestionerPanel;
     [SerializeField]
     GameObject AnswerersPanel;
+    //出題者・解答者で共通している部分のパネル
+    [SerializeField]
+    GameObject QuestionTimePanel;
+    //出題者・解答者のパネルにある4つのアイコンの表示
+    ShowIcon2 _showIcon2;
     //正解発表用のパネル
     [SerializeField]
     GameObject CorrectAnswerersPanel;
     //画面切り替え時の演出
     [SerializeField]
-    GameObject ChangeImage1;
-    [SerializeField]
-    GameObject ChangeImage2;
+    GameObject ChangeImage;
+    ChangeImage _changeImage;
     //タイマーの表示
     [SerializeField]
     GameObject Timer;
+    //ゲーム開始時に初期化するスクリプト
+    ResetGame _reset;
 
     //マスターの番号
     public static int MasterNum;
@@ -74,6 +80,10 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
         preSetting = true;
         M_photonView = this.GetComponent<PhotonView>();
         M_operate = this.GetComponent<NetworkOperate>();
+
+        _changeImage = ChangeImage.GetComponent<ChangeImage>();
+        _reset = GetComponent<ResetGame>();
+        _showIcon2 = GetComponent<ShowIcon2>();
     }
 
     // Update is called once per frame
@@ -194,7 +204,10 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
         //何週目か
         playcount++;
 
-        Debug.Log("ロード画面＋解答者出題者の発表をします");
+        
+
+        Debug.Log(playcount + "ロード画面＋解答者出題者の発表をします");
+        LoadingBoard.SetActive(true);
         mainmode = MainGameMode.PlayerSelect;
         yield return new WaitForSeconds(0.2f);
 
@@ -209,7 +222,7 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
         {
             questioner = false;
         }
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         if (questioner)
         {
             QuestionerText.SetActive(true);
@@ -218,9 +231,9 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
         {
             AnswerersText.SetActive(true);
         }
-        yield return new WaitForSeconds(4.0f);
+        yield return new WaitForSeconds(3.0f);
 
-        ChangeImage1.SetActive(true);
+        _changeImage.Init();
         // 指定秒間待つ
         yield return new WaitForSeconds(0.67f);
         LoadingBoard.SetActive(false);
@@ -230,7 +243,7 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
 
     private IEnumerator StartGame()
     {
-        Debug.Log("ゲームを始めます");
+        Debug.Log(playcount + "ゲームを始めます");
         mainmode = MainGameMode.QuestionTime;
         //yield return new WaitForSeconds(1.0f);
         if (questioner)
@@ -243,21 +256,24 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
             QuestionerPanel.SetActive(false);
             AnswerersPanel.SetActive(true);
         }
+        QuestionTimePanel.SetActive(true);
+        StartCoroutine(_showIcon2.showIcon());
         Timer.SetActive(true);
         yield return new WaitForSeconds(1.0f);
         //ここで時間の管理
         //ここでサーバー時間同期をしたい
 
 
-        yield return new WaitForSeconds(17.5f);
+        yield return new WaitForSeconds(15.5f);//ゲーム中
 
-        ChangeImage2.SetActive(true);
+        _changeImage.Init();
         // 指定秒間待つ
-        yield return new WaitForSeconds(0.67f);
+        yield return new WaitForSeconds(0.7f);
 
         //ここから正解発表
         QuestionerPanel.SetActive(false);
         AnswerersPanel.SetActive(false);
+        QuestionTimePanel.SetActive(false);
 
         StartCoroutine("CorrectAnswer");
         yield break;
@@ -266,13 +282,67 @@ public class MainGameManager2 : MonoBehaviourPunCallbacks
     private IEnumerator CorrectAnswer()
     {
         mainmode = MainGameMode.ShareAnswer;
-        Debug.Log("正解発表に移ります");
+        Debug.Log(playcount + "正解発表に移ります");
         CorrectAnswerersPanel.SetActive(true);
 
-        
+        yield return new WaitForSeconds(12.0f);//今正解発表中
+        if (playcount == 10)
+        {
+            GameManager.Instance.SetCurrentState(GameManager.GameMode.Result);
+            yield break;
+        }
+        _changeImage.Init();
+        yield return new WaitForSeconds(0.1f);
+
+        //ここから次の周回の準備
+        mainmode = MainGameMode.ReportQuestion;
+        //出題者を切り替える
+        var players = PhotonNetwork.PlayerList;
+        /*foreach (var player in players)
+        {
+            Debug.Log("プレイヤーの番号羅列" + MatchmakingView.PlayerNum2);
+            if (MatchmakingView.PlayerNum2 == ((playcount % 5) + 1))
+            {
+                Debug.Log("出題者になりました");
+                PhotonNetwork.SetMasterClient(player);
+            }
+        }*/
+        if (MatchmakingView.PlayerNum2 == ((playcount % 5) + 1))
+        {
+            Debug.Log("出題者になりました");
+            PhotonNetwork.SetMasterClient(players[MatchmakingView.PlayerNum2 - 1]);
+        }
+        if (playcount == 6)
+        {
+            PhotonNetwork.SetMasterClient(players[1]);
+        }
+
+        yield return new WaitForSeconds(0.6f);
+        _reset.ResetAll();
+        yield return new WaitForSeconds(0.2f);
+        preSetting = true;
         yield break;
     }
 
+
+    //ゲーム終了時に初期化する
+    public void Init()
+    {
+        LoadingBoard.SetActive(false);
+        AnswerBoard.SetActive(false);
+        ChoiceBoard.SetActive(false);
+
+        QuestionerText.SetActive(false);
+        AnswerersText.SetActive(false);
+        QuestionerPanel.SetActive(false);
+        AnswerersPanel.SetActive(false);
+        QuestionTimePanel.SetActive(false);
+        CorrectAnswerersPanel.SetActive(false);
+        //Timer.SetActive(false);
+        
+
+        Debug.Log((playcount + 1) + "週目のゲームを開始します");
+    }
 
     private void preLG()
     {
